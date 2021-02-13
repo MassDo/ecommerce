@@ -20,7 +20,7 @@ def getProducts(request):
     return Response(products)
 
 @api_view(['GET'])
-def getProduct(request, pk):
+def getProduct(request, pk):    
     prod = [p for p in products if p['_id'] == pk]
 
-    return Response(prod)
+    return Response(prod[0])
