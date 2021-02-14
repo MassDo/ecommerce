@@ -9,6 +9,7 @@ django-cors-headers = "*"
 [packages]
 django = "*"
 djangorestframework = "*"
+pillow = "*"
 
 [requires]
 python_version = "3.8"
