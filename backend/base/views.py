@@ -15,7 +15,6 @@ def getRoutes(request):
 
     return Response(routes)
 
-
 @api_view(['GET'])
 def getProducts(request):
     products = Product.objects.all()
@@ -24,7 +23,7 @@ def getProducts(request):
 
 @api_view(['GET'])
 def getProduct(request, pk):    
-    products = Product.objects.get(_id=pk)
-    serializer = ProductSerializer(products, many=False)
+    product = Product.objects.get(_id=pk)
+    serializer = ProductSerializer(product, many=False)
 
     return Response(serializer.data)
