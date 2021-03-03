@@ -3,7 +3,7 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
 
 from base.models import Product, Order, OrderItem, ShippingAddress
-from base.serializers import ProductSerializer
+from base.serializers import ProductSerializer, OrderSerializer
 
 from rest_framework import status
 
@@ -17,7 +17,7 @@ def addOrderItems(request):
     orderItems = data['orderItems']
 
     if orderItems and len(orderItems) == 0:
-        return Response({'detail': 'No Order Items'}, status=status.HTTP_400_BAD_REQUEST})
+        return Response({'detail': 'No Order Items'}, status=status.HTTP_400_BAD_REQUEST)
     else:
         # 1 - Create Order
         order = Order.objects.create(
@@ -42,14 +42,14 @@ def addOrderItems(request):
             item = OrderItem.objects.create(
                 product = product,
                 order = order,
-                name = product.name
-                qty = i['qty']
-                price = i['price']
+                name = product.name,
+                qty = i['qty'],
+                price = i['price'],
                 image = product.image.url
             )
             # 4 - Update the stock
             product.countInStock -= item.qty
             product.save()
 
-        serializer = OrderSerializer(order; many=False)
+        serializer = OrderSerializer(order, many=False)
         return Response(serializer.data)
