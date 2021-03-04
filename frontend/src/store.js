@@ -19,13 +19,16 @@ import {
 } from "./reducers/orderReducers";
 
 const reducer = combineReducers({
+  // products
   productList: productListReducer,
   productDetails: productDetailsReducer,
   cart: cartReducer,
+  // user
   userLogin: userLoginReducer,
   userRegister: userRegisterReducer,
   userDetails: userDetailsReducer,
   userUpdateProfile: userUpdateProfileReducer,
+  // order
   orderCreate: orderCreateReducer,
   orderDetails: orderDetailsReducer,
   orderPay: orderPayReducer,
