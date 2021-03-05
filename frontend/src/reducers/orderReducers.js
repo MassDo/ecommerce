@@ -116,7 +116,7 @@ export const orderListMyReducer = (state = { orders: [] }, action) => {
       };
 
     case ORDER_LIST_MY_RESET:
-      return { order: [] };
+      return { orders: [] };
     default:
       return state;
   }
