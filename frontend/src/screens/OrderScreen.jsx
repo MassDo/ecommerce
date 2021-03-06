@@ -73,6 +73,7 @@ const OrderScreen = ({ match }) => {
       dispatch({ type: ORDER_PAY_RESET });
       dispatch({ type: ORDER_DELIVER_RESET });
       dispatch(getOrderDetails(orderId));
+      dispatch(listMyOrders());
     } else if (!order.isPaid) {
       if (!window.paypal) {
         addPayPalScript();
@@ -84,6 +85,7 @@ const OrderScreen = ({ match }) => {
 
   const successPaymentHandler = (paymentResult) => {
     dispatch(payOrder(orderId, paymentResult));
+    window.setTimeout(dispatch(listMyOrders()), 3000);
   };
 
   const deliverHandler = () => {
