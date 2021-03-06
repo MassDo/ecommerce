@@ -7,6 +7,9 @@ from rest_framework.decorators import api_view
 from base.models import Product
 from base.serializers import ProductSerializer
 
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
+
 # All products
 @api_view(['GET'])
 def getProducts(request):
@@ -21,3 +24,11 @@ def getProduct(request, pk):
     serializer = ProductSerializer(product, many=False)
 
     return Response(serializer.data)
+
+# Admin Delete product
+@api_view(['DELETE'])
+@permission_classes([IsAdminUser])
+def deleteProduct(request, pk):
+    product = Product.objects.get(_id=pk)
+    product.delete()
+    return Response('Producted Deleted')
