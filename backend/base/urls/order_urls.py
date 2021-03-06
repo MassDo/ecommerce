@@ -4,6 +4,7 @@ from base.views import order_views as views
 # extends url: api/orders/
 
 urlpatterns=[
+    path('', views.getOrders, name='my'),
     path('add/', views.addOrderItems, name='orders-add'),
     path('myorders/', views.getMyOrders, name='myorders'),
 

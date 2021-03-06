@@ -71,8 +71,7 @@ def deleteProduct(request, pk):
     product.delete()
     return Response('Producted Deleted')
 
-
-
+# admin upload image
 @api_view(['POST'])
 def uploadImage(request):
     data = request.data

@@ -88,3 +88,11 @@ def updateOrderToPay(request, pk):
     order.save()
 
     return Response('Order was paid')
+
+# admin get orders
+@api_view(['GET'])
+@permission_classes([IsAdminUser])
+def getOrders(request):
+    orders = Order.objects.all()
+    serializer = OrderSerializer(orders, many=True)
+    return Response(serializer.data)
