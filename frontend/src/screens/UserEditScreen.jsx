@@ -11,7 +11,7 @@ import {
   USER_UPDATE_RESET,
 } from "../constants/userConstants";
 
-const EditUserScreen = ({ match, history }) => {
+const UserEditScreen = ({ match, history }) => {
   // Admin update component
   const userId = match.params.id;
 
@@ -105,4 +105,4 @@ const EditUserScreen = ({ match, history }) => {
   );
 };
 
-export default EditUserScreen;
+export default UserEditScreen;
