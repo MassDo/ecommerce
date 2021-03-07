@@ -7,6 +7,7 @@ import Message from "../components/Message";
 import Paginate from "../components/Paginate";
 import { listProducts } from "../actions/productActions";
 import { PayPalButton } from "react-paypal-button-v2";
+import ProductCarousel from "../components/ProductCarousel";
 
 const HomeScreen = ({ history }) => {
   const dispatch = useDispatch();
@@ -21,6 +22,8 @@ const HomeScreen = ({ history }) => {
 
   return (
     <div>
+      {/* no carousel if we search for a product */}
+      {!keyword && <ProductCarousel />}
       <h1>Latest products</h1>
       {loading ? (
         <Loader />

@@ -49,6 +49,14 @@ def getProduct(request, pk):
 
     return Response(serializer.data)
 
+# Get products over 4 stars
+@api_view(['GET'])
+def getTopProducts(request):
+    # rating greater than or egal, take the top 5 products
+    products = Product.objects.filter(rating__gte=4).order_by('-rating')[0:5]
+    serializer = ProductSerializer(products, many=True)
+    return Response(serializer.data)
+
 # Admin create product
 @api_view(['POST'])
 @permission_classes([IsAdminUser])
