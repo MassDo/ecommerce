@@ -22,12 +22,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '0cjb1$z==mval0-*v=!o08$)u%%4r0(i#_-cnb(@93q!m_+ta%'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'prooshop.herokuapp.com/']
 
 
 # Application definition
@@ -42,6 +42,7 @@ INSTALLED_APPS = [
 
     'rest_framework',
     'corsheaders',
+    'storages',
     
     'base.apps.BaseConfig',
     
@@ -83,6 +84,7 @@ SIMPLE_JWT = {
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware', # Serve static files for prod WHITENOISE
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -117,10 +119,21 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'proshop',
+        'USER':'dorianmassoulier',
+        'PASSWORD':os.environ.get('DB_PASS'),
+        'HOST':'proshop-identifier.cvqsl7ft00br.eu-west-3.rds.amazonaws.com',
+        'PORT':'5432'
     }
 }
 
@@ -168,9 +181,21 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',
     BASE_DIR / 'frontend/build/static'
 ]
+# for dev static 
+MEDIA_ROOT = BASE_DIR / 'static/images' # for dev, debug = True
+STATIC_ROOT = BASE_DIR / 'staticfiles' # for prod
 
-MEDIA_ROOT = 'static/images'
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
 ]
+# For production to serve static file with s3 bucket
+AWS_QUERYSTRING_AUTH = False
+DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+AWS_ACCESS_KEY_ID = os.environ.get('AWS_ACCESS_KEY_ID')
+AWS_SECRET_ACCESS_KEY = os.environ.get('AWS_SECRET_ACCESS_KEY')
+AWS_STORAGE_BUCKET_NAME = 'proshop-bucket-ecom'
+
+# If we are on heroku (prod) debug set to False
+if os.getcwd() == '/app':
+    DEBUG = False
