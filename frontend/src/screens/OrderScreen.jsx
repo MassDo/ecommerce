@@ -99,6 +99,7 @@ const OrderScreen = ({ match }) => {
   ) : (
     // no error and no loading so show me the orderscreen !!!!
     <div>
+      <Link to="/admin/orderlists">Go Back</Link>
       <h1>Order: {order._id}</h1>
       <Row>
         {/* Order details  */}

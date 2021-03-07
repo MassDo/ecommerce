@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.http import JsonResponse
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
@@ -12,16 +13,33 @@ from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 from rest_framework import status
 
-# All products
+# All products with search and pagination functionalities
 @api_view(['GET'])
 def getProducts(request):
+    # get search words from the url
     query = request.query_params.get('keyword')
     if query == None:
         query = ''
+    # filter the query set with the search word
+    products = Product.objects.filter(
+        name__icontains=query).order_by('-createdAt')
+    # get on witch page the user is from url params
+    page = request.query_params.get('page')
+    paginator = Paginator(products, 4)
+    # Make the queryset of products to return for this page and search keywords
+    try:
+        products = paginator.page(page)
+    except PageNotAnInteger:
+        products = paginator.page(1)
+    except EmptyPage:
+        products = paginator.page(paginator.num_pages)
 
-    products = Product.objects.filter(name__icontains=query).order_by('-createdAt')
+    if page == None:
+        page = 1
+    # serialize and return data
+    page = int(page)
     serializer = ProductSerializer(products, many=True)
-    return Response(serializer.data)
+    return Response({'products': serializer.data, 'page': page, 'pages': paginator.num_pages})
 
 # Details product
 @api_view(['GET'])
